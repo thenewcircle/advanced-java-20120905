@@ -15,6 +15,7 @@ public abstract class ImmutableList<E> {
 	public abstract E head();
 	public abstract ImmutableList<E> tail();
 	public abstract int size();
+	public abstract <F> ImmutableList<F> map(Function<E, F> fn);
 
 	private static class Cons<E> extends ImmutableList<E> {
 		private final E head;
