@@ -1,28 +1,32 @@
 package com.marakana.concurrency;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.atomic.AtomicReference;
+
+import com.marakana.immutablelist.ImmutableStack;
 
 public class Logger implements Runnable {
 
-	private final Queue<Object> queue = new LinkedList<Object>();
+	private final AtomicReference<ImmutableStack<Object>> queue =
+		new AtomicReference<ImmutableStack<Object>>(ImmutableStack.empty());
 
 	public void log(Object o) {
-		synchronized (queue) {
-			queue.add(o);
-		}
+		ImmutableStack<Object> before, after;
+		do {
+			before = queue.get();
+			after = before.push(o);
+		} while (!queue.compareAndSet(before, after));
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			if (queue.isEmpty()) {
-				try {
-					Thread.sleep(0);
-				} catch (InterruptedException e) {}
+			ImmutableStack<Object> before = queue.get();
+			if (before.isEmpty()) {
+				Thread.yield();
 			} else {
-				synchronized (queue) {
-					System.out.println(queue.remove());
+				ImmutableStack<Object> after = before.tail();
+				if (queue.compareAndSet(before, after)) {
+					System.out.println(before.head());
 				}
 			}
 		}

@@ -11,6 +11,11 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.marakana</groupId>
+			<artifactId>immutablelist</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

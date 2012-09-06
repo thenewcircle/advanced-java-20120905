@@ -30,6 +30,6 @@ public class Fibonacci {
 			t.start();
 		}
 
-		logger.run();
+		new Thread(logger).start();
 	}
 }

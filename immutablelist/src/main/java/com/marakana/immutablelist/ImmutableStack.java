@@ -15,6 +15,7 @@ public abstract class ImmutableStack<E> {
 	public abstract E head();
 	public abstract ImmutableStack<E> tail();
 	public abstract int size();
+	public abstract boolean isEmpty();
 	public abstract <F> ImmutableStack<F> map(Function<? super E, ? extends F> fn);
 
 	private static class Cons<E> extends ImmutableStack<E> {
@@ -39,6 +40,11 @@ public abstract class ImmutableStack<E> {
 		@Override
 		public int size() {
 			return 1 + tail.size();
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return false;
 		}
 
 		@Override
@@ -91,6 +97,11 @@ public abstract class ImmutableStack<E> {
 		@Override
 		public int size() {
 			return 0;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return true;
 		}
 
 		@Override

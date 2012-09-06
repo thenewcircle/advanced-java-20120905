@@ -27,16 +27,22 @@ public class ImmutableQueue<E> {
 		return new ImmutableQueue<E>(in, out.tail());
 	}
 
+	public int size() {
+		return in.size() + out.size();
+	}
+
+	public boolean isEmpty() {
+		return in.isEmpty() && out.isEmpty();
+	}
+
 	private void shuffle() {
 		ImmutableStack<E> in = this.in;
 		ImmutableStack<E> out = this.out;
-		while (in.size() > 0) {
+		while (!in.isEmpty()) {
 			out = out.push(in.head());
 			in = in.tail();
 		}
-		synchronized (this) {
-			this.in = in;
-			this.out = out;
-		}
+		this.in = in;
+		this.out = out;
 	}
 }
