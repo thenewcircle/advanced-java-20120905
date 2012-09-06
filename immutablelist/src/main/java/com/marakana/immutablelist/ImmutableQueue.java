@@ -4,6 +4,10 @@ public class ImmutableQueue<E> {
 
 	private ImmutableStack<E> in, out;
 
+	public static <E> ImmutableQueue<E> empty() {
+		return new ImmutableQueue<E>(ImmutableStack.<E> empty(), ImmutableStack.<E> empty());
+	}
+
 	private ImmutableQueue(ImmutableStack<E> in, ImmutableStack<E> out) {
 		this.in = in;
 		this.out = out;
