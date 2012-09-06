@@ -15,7 +15,7 @@ public abstract class ImmutableList<E> {
 	public abstract E head();
 	public abstract ImmutableList<E> tail();
 	public abstract int size();
-	public abstract <F> ImmutableList<F> map(Function<E, F> fn);
+	public abstract <F> ImmutableList<F> map(Function<? super E, ? extends F> fn);
 
 	private static class Cons<E> extends ImmutableList<E> {
 		private final E head;
@@ -39,6 +39,11 @@ public abstract class ImmutableList<E> {
 		@Override
 		public int size() {
 			return 1 + tail.size();
+		}
+
+		@Override
+		public <F> ImmutableList<F> map(Function<? super E, ? extends F> fn) {
+			return new Cons<F>(fn.apply(head), tail.map(fn));
 		}
 
 		@Override
@@ -69,8 +74,6 @@ public abstract class ImmutableList<E> {
 				return false;
 			return true;
 		}
-
-		
 	}
 
 	private static class Nil<E> extends ImmutableList<E> {
@@ -88,6 +91,11 @@ public abstract class ImmutableList<E> {
 		@Override
 		public int size() {
 			return 0;
+		}
+
+		@Override
+		public <F> ImmutableList<F> map(Function<? super E, ? extends F> fn) {
+			return empty();
 		}
 
 		@Override
