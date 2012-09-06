@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import static com.marakana.immutablelist.ImmutableList.empty;
+import static com.marakana.immutablelist.ImmutableStack.empty;
 
 public class ImmutableListTest {
 
-	private static final ImmutableList<Integer>
+	private static final ImmutableStack<Integer>
 		EMPTY = empty(),
 		ONE = EMPTY.push(1),
 		TWO = ONE.push(2);
