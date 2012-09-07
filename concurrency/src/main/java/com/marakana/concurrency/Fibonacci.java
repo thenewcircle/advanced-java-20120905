@@ -6,7 +6,7 @@ import java.util.Random;
 public class Fibonacci {
 
 	private static final Random RANDOM = new Random();
-	private static final int MAX_FIBONACCI = 20;
+	private static final int MAX_FIBONACCI = 40;
 
 	public static BigInteger fibonacci(int n) {
 		return n < 2
@@ -23,7 +23,7 @@ public class Fibonacci {
 				public void run() {
 					while (true) {
 						BigInteger fib = fibonacci(RANDOM.nextInt(MAX_FIBONACCI));
-						logger.log(fib);
+						logger.put(fib);
 					}
 				}
 			};
