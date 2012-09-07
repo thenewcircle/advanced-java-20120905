@@ -1,6 +1,7 @@
 package com.marakana.clientserver;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -12,7 +13,7 @@ import com.marakana.concurrency.Logger;
 
 public class Server {
 
-	private static class Task implements Runnable {
+	private static class Task implements Runnable, Closeable {
 		private final Socket client;
 		private final Logger logger;
 
@@ -40,6 +41,12 @@ public class Server {
 				e.printStackTrace();
 			}
 		}
+
+		@Override
+		public void close() throws IOException {
+			client.close();
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -50,12 +57,20 @@ public class Server {
 		try {
 			ServerSocket server = new ServerSocket(31337);
 			try {
+				// main loop: accept client connections and handle them asynchronously
 				while (true) {
 					Socket client = server.accept();
 					executor.submit(new Task(client, logger));
 				}
 			} finally {
+				// clean up as best as reasonably possible
 				server.close();
+				for (Runnable runnable : executor.shutdownNow()) {
+					if (runnable instanceof Task) {
+						Task task = (Task) runnable;
+						task.close();
+					}
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
