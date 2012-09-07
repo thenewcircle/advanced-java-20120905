@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Random;
+
+import com.marakana.concurrency.Fibonacci;
 
 public class Client {
 
@@ -13,7 +16,10 @@ public class Client {
 			try {
 				PrintWriter out = new PrintWriter(server.getOutputStream());
 				try {
-					out.println("Hello Server");
+					for (int i = 0; i < 100; i++) {
+						out.println(Fibonacci.fibonacci(new Random().nextInt(40)));
+						out.flush();
+					}
 				} finally {
 					out.close();
 				}
