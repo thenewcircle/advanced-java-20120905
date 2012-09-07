@@ -4,6 +4,7 @@
 	<groupId>com.marakana</groupId>
 	<artifactId>concurrency</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -17,6 +18,7 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

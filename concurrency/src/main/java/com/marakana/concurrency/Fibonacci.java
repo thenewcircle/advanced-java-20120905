@@ -1,7 +1,13 @@
 package com.marakana.concurrency;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Fibonacci {
 
@@ -14,22 +20,28 @@ public class Fibonacci {
 			: fibonacci(n - 1).add(fibonacci(n - 2));
 	}
 
-	public static void main(String[] args) {
-		final Logger logger = new Logger();
+	public static void main(String[] args) throws Exception {
+		ExecutorService executor = Executors.newFixedThreadPool(10);
 
-		for (int i = 0; i < 10; i++) {
-			Thread t = new Thread() {
+		List<Callable<BigInteger>> tasks = new ArrayList<Callable<BigInteger>>();
+
+		for (int i = 0; i < 20; i++) {
+			tasks.add(new Callable<BigInteger>() {
+
 				@Override
-				public void run() {
-					while (true) {
-						BigInteger fib = fibonacci(RANDOM.nextInt(MAX_FIBONACCI));
-						logger.put(fib);
-					}
+				public BigInteger call() throws Exception {
+					return fibonacci(RANDOM.nextInt(MAX_FIBONACCI));
 				}
-			};
-			t.start();
+				
+			});
 		}
 
-		new Thread(logger).start();
+		List<Future<BigInteger>> futures = executor.invokeAll(tasks);
+
+		for (Future<BigInteger> future : futures) {
+			System.out.println(future.get());
+		}
+
+		executor.shutdown();
 	}
 }
